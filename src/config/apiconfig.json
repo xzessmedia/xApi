@@ -1,0 +1,21 @@
+{
+    "ApiName": "",
+    "Version": "0.0.1",
+    "AccessPort": 2250,
+    "PublicBaseUrl": "http://localhost",
+    "Database": {
+        "Host": "localhost",
+        "Port": 3306,
+        "DatabaseName": "testapi",
+        "Credentials": {
+            "Username": "root",
+            "Password": ""
+        }
+    },
+    "Routes": [
+        {
+            "Path": "/",
+            "Component": ""
+        }
+    ]
+}
