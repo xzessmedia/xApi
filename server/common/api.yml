@@ -1,0 +1,76 @@
+openapi: 3.0.1
+info:
+  title: xApi
+  description: xzess lightweight api boilerplate
+  contact:
+    name: xzessmedia
+    url: https://github.com/xzessmedia
+    email: xzessmedia@gmail.com
+  version: 1.0.0
+servers:
+- url: http://localhost:3500/
+security:
+- Development: []
+tags:
+- name: Basic
+paths:
+  /api/v1/basic/helloworld/:
+    get:
+      tags:
+      - Basic
+      summary: Prints a Welcome Message
+      description: Outputs welcome message
+      operationId: EchoWelcomeMessage
+      responses:
+        200:
+          description: Response with welcome msg
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  title: Response
+                  type: object
+                  properties: {}
+                  x-oad-type: object
+          x-oad-type: response
+    x-oad-type: operation
+  /api/v1/basic/logs/:
+    get:
+      tags:
+      - Basic
+      summary: Gets all products
+      description: Fetch all RequestLogs from Database
+      operationId: Receive Log List
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: The number of items to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The numbers of items to return
+      responses:
+        200:
+          description: Responses with a list of logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  title: ProductData
+                  type: object
+                  properties: {}
+                  x-oad-type: object
+          x-oad-type: response
+    x-oad-type: operation
+components:
+  securitySchemes:
+    Development:
+      type: apiKey
+      description: This Api Key is for accessing developer routes
+      name: token
+      in: header

@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+
+  api:
+    build: .
+    image: datahubapi
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./dist:/datahub
+  db:
+    image: mariadb
+    restart: always    
+    ports:
+      - 3306:3306
+    volumes:
+      - ./apidata/mariadb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Picard1922
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

@@ -1,19 +1,20 @@
 FROM ubuntu:18.04
-MAINTAINER Tim Koepsel
 
-EXPOSE 2250
+RUN apt-get update && apt-get upgrade -q -y && \
+apt-get install -q -y vim && \
+apt-get install -q -y nodejs
 
-RUN apt-get update && apt-get install vim -q -y && \
-apt-get install vim -q -y && \
-apt-get install curl -q -y && \
-apt-get install lsof -q -y && \
-apt-get install nodejs -q -y
+RUN apt-get install -q -y npm && \
+npm -g install npm@latest && \
+npm -g install pm2
 
-WORKDIR /api
+
 
 ADD dist /api
 ADD node_modules /node_modules
+WORKDIR /api
 
-RUN apt-get install npm -q -y && npm install -g pm2
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
 
-ENTRYPOINT pm2 start index.js && bash
+ENTRYPOINT /docker-entrypoint.sh

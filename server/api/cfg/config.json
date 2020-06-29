@@ -1,0 +1,38 @@
+{
+    "name": "xApi Lightweight Boilerplate",
+    "publicurl": "api.mydomain.com",
+    "version": "0.44",
+    "debug": false,
+    "port": 3500,
+    "crypt": {
+        "password": "jdskajkajDJHSAKJ432DAKJSKAKAJSDjsd"
+    },
+    "ssl": {
+        "useSSL": false,
+        "SSLKey": "/etc/ssl/crt/YOURSSL.key",
+        "SSLCRT": "/etc/ssl/crt/YOURSSL.crt"
+    },
+    "auth" : [],
+    "apikeys": [
+        {
+            "User": "Developer",
+            "Key": "TESTTOKEN"
+        }
+    ],
+    "database": {
+        "mysql": {
+            "host": "localhost",
+            "user": "admin",
+            "password": "33afbOSdjY2e7c60",
+            "database": "xapi",
+			"connectionLimit": 1000
+        },
+        "mysql_test": {
+            "host": "localhost",
+            "user": "root",
+            "password": "123456",
+            "database": "xapi",
+			"connectionLimit": 1000
+        }
+    }
+}
