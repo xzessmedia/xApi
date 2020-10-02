@@ -1,37 +1,49 @@
 /**
  * @ Author: Tim Koepsel
  * @ Create Time: 23.06.2020 11:28:42
- * @ Modified by: Tim Koepsel
- * @ Modified time: 23.06.2020 13:06:16
+ * @ Modified by: Tim Koepsel <tim.koepsel@picard.de>
+ * @ Modified time: 24.08.2020 13:41:08
  * @ Description:
  */
 
  import * as config from '../cfg/config.json';
+import { Log } from './debug';
 
-class Helpers {
-    CheckAuth(token: any, done: any) {
+export default class Helper {
+    static CheckAuth(token: any, done: any) {
         let result:boolean | object = false;
-
+        let hasFound = false;
+        
         config.apikeys.forEach((key) => {
             if (key.Key === token) {
-                console.log("Authorized Access: "+key.Key);
+                
+                Log("INFO", "Authorized Access",key.Key);
                 result = {User: key.User, Token: key.Key};
+                hasFound = true;
             }
         });
         // If no auth found, invalidate
-        console.log("Unauthorized Access (Token): "+token);
-        //return done(null, false);
+        if (hasFound == false) {
+            Log("WARNING", "Unauthorized Access",token);
+        }
 
         return result;
     }
-    ExtractKeyFromConfig(keyname: string) {
+    static ExtractKeyFromConfig(keyname: string) {
         config.apikeys.forEach((key) => {
             if (key.User === keyname) {
                 return key;
             }
         });
     }
-}
 
-const Helper = new Helpers();
-export default Helper;
+    static ExtractTokenFromConfig(keyname: string) {
+        let response;
+        config.apikeys.forEach((key) => {
+            if (key.User === keyname) {
+                response = key.Key;
+            }
+        });
+        return response;
+    }
+}

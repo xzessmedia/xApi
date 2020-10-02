@@ -6,5 +6,8 @@
  */
 import { Application } from 'express';
 export default function routes(app: Application): void {
-  app.use('/api/v1/basic/', require("./api/routes/v1/basic/routes-basic"));
+  app.use('/api/v1/datahub/', require("./api/routes/v1/datahub/routes-datahub"));
+  app.use('/api/v1/datahub/products', require("./api/routes/v1/datahub/routes-datahub-products"));
+  app.use('/api/v1/datahub', require("./api/routes/v1/datahub/routes-upload"));
+  app.use('/api/v1/datahub/pdo', require("./api/routes/v1/datahub/routes-pdo"));
 };

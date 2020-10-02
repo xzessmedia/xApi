@@ -1,8 +1,8 @@
 /**
  * @ Author: Tim Koepsel
  * @ Create Time: 12.06.2020 14:35:53
- * @ Modified by: Tim Koepsel
- * @ Modified time: 29.06.2020 18:20:05
+ * @ Modified by: Tim Koepsel <tim.koepsel@picard.de>
+ * @ Modified time: 14.09.2020 13:01:50
  * @ Description:
  */
 import express from 'express';
@@ -20,13 +20,17 @@ import installValidator from './openapi';
 import l from './logger';
 import passport = require('passport');
 import { BasicStrategy } from 'passport-http';
-import Helper from '../api/core/helper.js';
+import Helper from '../api/core/helper';
+import multer from 'multer';
 var UniqueTokenStrategy = require('passport-unique-token').Strategy;
 var cors = require('cors');
 const fs = require('fs');
 const app = express();
 const shell = require('shelljs')
 const getRawBody = require("raw-body");
+
+// Toggle Https / Http
+const useSSL: boolean = false;
 
 
 export function customHeaders(req, res, next) {
@@ -42,14 +46,14 @@ export default class ExpressServer {
     app.set('appPath', root + 'client');
     app.use(customHeaders);
     app.use(cors());
-    app.use(bodyParser.raw({type: 'application/octet-stream', limit : '100kb'}))
-    app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
-    app.use(bodyParser.urlencoded({ extended: true, limit: process.env.REQUEST_LIMIT || '100kb' }));
+    app.use(bodyParser.raw({type: 'application/octet-stream', limit : '10000kb'}))
+    app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '10000kb' }));
+    app.use(bodyParser.urlencoded({ extended: true, limit: process.env.REQUEST_LIMIT || '10000kb' }));
     app.use(cookieParser(process.env.SESSION_SECRET));
     app.use(express.static(`${root}/public`));
     app.use(passport.initialize());
     app.use(passport.session());
-
+    app.use(multer({dest: config.uploads}).single('file'));
     app.use(async (req, res, next) => {
       if (req.headers["content-type"] === "application/octet-stream") {
           req.body = await getRawBody(req);
@@ -83,15 +87,15 @@ export default class ExpressServer {
 
   listen(p: string | number = process.env.PORT): Application {
     const welcome = port => () => {
-      console.log('*********************************************\nXAPI SERVICE');
+      console.log(`*********************************************\n${String(config.name).toUpperCase()} API SERVICE`);
       console.log('Port: '+port);
-      if (config.debug === false) {
+      if (config.localtestmode === false) {
         if (config.ssl.useSSL) {
           console.log('secured with SSL (https)');
-          console.log(config.publicurl+':'+port);
+          console.log(`https://${config.publicurl}:${port}`);
         } else {
           console.log('unsecured without SSL (http)');
-          console.log(config.publicurl+':'+port);
+          console.log(`http://${config.publicurl}:${port}`);
         }
       } else {
           console.log('****   Developer Mode   ****');
@@ -102,22 +106,21 @@ export default class ExpressServer {
       l.info(`up and running in ${process.env.NODE_ENV || 'development'} @: ${os.hostname()} on port: ${port}}`);
     }
 
-    
-
-    if (config.debug == false) {
-      if (config.ssl.useSSL) {
+    if (config.localtestmode === true) {
+      http.createServer(app).listen(p, welcome(p));
+    } else {
+      if (config.ssl.useSSL == true) {
         // Setup SSL
         const options = {
-          key: fs.readFileSync(config.ssl.SSLKey),
-          cert: fs.readFileSync(config.ssl.SSLCRT)
+          key: fs.readFileSync(config.ssl.key),
+          cert: fs.readFileSync(config.ssl.crt)
         };
         https.createServer(options,app).listen(p,welcome(p));
       } else {
         http.createServer(app).listen(p, welcome(p));
       }
-    } else {
-      http.createServer(app).listen(p, welcome(p));
     }
+
     
     return app;
   }

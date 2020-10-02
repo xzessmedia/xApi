@@ -4,12 +4,12 @@
  * @Last Modified by: Tim Koepsel
  * @Last Modified time: 2020-02-13 14:11:09
  */
- import CoreData from "../core/database";
  import ServiceTools from "./service-tools";
  import { Request, Response, application } from "express";
  import { createWriteStream } from "fs";
  import { inspect } from "util";
-
+import { utils } from "mocha";
+import CoreData from "../core/coredata";
 /**
  * Main Service Class
  *
@@ -51,10 +51,22 @@ class ServiceLog {
                     Body: req.body,
                     Url: req.url
                 }
+                let t_user;
+                if(req.user === undefined) {
+                    t_user = {
+                        User: 'Anonymous',
+                        Token: 'none'
+                    }
+                } else {
+                    t_user = {
+                        User: req.user.User !== undefined ? req.user.User: 'Anonymous',
+                        Token: req.user.Token !== undefined ? req.user.User: 'none'
+                    }
+                }
                 var result = await CoreData.Query(`
                 INSERT INTO requestlog
                 (\`RequestedAt\`,\`AccessedRoute\`,\`User\`,\`RemoteIP\`,\`Token\`,\`Payload\`,\`ResponseTime\`)
-                VALUES ('${ServiceTools.CreateSQLDateString(new Date().toISOString())}','${route}','${req.user.User}','${req.connection.remoteAddress}','${req.user.Token}','${JSON.stringify(t_payload)}', '${0}');
+                VALUES ('${ServiceTools.CreateSQLDateString(new Date().toISOString())}','${route}','${t_user.User}','${req.connection.remoteAddress}','${t_user.Token}','${JSON.stringify(t_payload)}', '${0}');
                 `);
 
 

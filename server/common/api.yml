@@ -1,61 +1,443 @@
 openapi: 3.0.1
 info:
-  title: xApi
-  description: xzess lightweight api boilerplate
+  title: Picard Datahub Api
+  version: 0.5.2
+  description: >-
+    The Picard Datahub Api is the public interface between the Datahub and
+    Picard
   contact:
-    name: xzessmedia
-    url: https://github.com/xzessmedia
-    email: xzessmedia@gmail.com
-  version: 1.0.0
+    name: Friedrich PICARD GmbH & Co.KG
+    url: 'https://www.picard.de'
+    email: edv@picard.de
+  x-logo:
+    url: ''
 servers:
-- url: http://localhost:3500/
-security:
-- Development: []
-tags:
-- name: Basic
+  - url: 'https://datahub.picard.de:3500/'
+  - url: 'http://localhost:3500/'
 paths:
-  /api/v1/basic/helloworld/:
+  /api/v1/datahub/products/:
     get:
       tags:
-      - Basic
-      summary: Prints a Welcome Message
-      description: Outputs welcome message
-      operationId: EchoWelcomeMessage
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
       responses:
-        200:
-          description: Response with welcome msg
+        '200':
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  title: Response
-                  type: object
-                  properties: {}
-                  x-oad-type: object
+                  $ref: '#/components/schemas/Product'
+          description: Responses with a list of products
           x-oad-type: response
+      operationId: Receive Product List
+      summary: Get all products
+      description: This Routes transmit all products Picard is offering
     x-oad-type: operation
-  /api/v1/basic/logs/:
+  /api/v1/datahub/products/lineartech:
     get:
       tags:
-      - Basic
-      summary: Gets all products
-      description: Fetch all RequestLogs from Database
-      operationId: Receive Log List
+        - Datahub
       parameters:
-        - in: query
-          name: offset
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
           schema:
             type: integer
-          description: The number of items to skip before starting to collect the result set
-        - in: query
-          name: limit
-          schema:
-            type: integer
+          in: query
+        - name: limit
           description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
       responses:
-        200:
-          description: Responses with a list of logs
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineartechProduct'
+          description: Responses with a list of lineartech products
+          x-oad-type: response
+      operationId: Receive LinearTech Product List
+      summary: Get all  lineartech products
+      description: This Routes transmit all lineartech products Picard is offering
+    x-oad-type: operation
+  /api/v1/datahub/products/quantities/lineartech:
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LineartechProductQuantity'
+          description: Responses with lineartech stockamount
+          x-oad-type: response
+      operationId: Receive LinearTech Product Quantities
+      summary: Get only  lineartech quantities (smaller)
+      description: This Routes transmit all lineartech product quantities Picard is offering
+    x-oad-type: operation
+  /api/v1/datahub/products/quantities/:
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductQuantity'
+          description: Responses with a list of products
+          x-oad-type: response
+      operationId: Receive Product Quantity List
+      summary: Get all product quantities
+      description: This Routes transmit all product quantities
+    x-oad-type: operation
+  /api/v1/datahub/manufacturers/:
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductManufacturer'
+          description: Responses with a list of product categories
+          x-oad-type: response
+      operationId: Receive Manufacturer List
+      summary: Get all product manufacturers
+      description: This Routes sends you all available Manufacturers
+    x-oad-type: operation
+  '/api/v1/datahub/downloads/files/id/{fileid}':
+    get:
+      tags:
+        - Files
+      parameters:
+        - name: fileid
+          description: The associated File Id to this request
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+          description: Responds with the associated File
+          x-oad-type: response
+      operationId: Receive Specific File by id
+      summary: Get a specific uploaded file
+      description: Download Files with this Route
+    x-oad-type: operation
+  '/api/v1/datahub/downloads/files/name/{filename}':
+    get:
+      tags:
+        - Files
+      parameters:
+        - name: filename
+          description: The associated File Id to this request
+          schema:
+            type: string
+          in: path
+          required: true
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+          description: Responds with the associated File
+          x-oad-type: response
+      operationId: Receive Specific File by originalfilename
+      summary: Get a specific uploaded file
+      description: Download Files with this Route
+    x-oad-type: operation
+  /api/v1/datahub/uploads/files/:
+    post:
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  nullable: false
+                  format: binary
+                  type: string
+      tags:
+        - Files
+      parameters:
+        - name: filetype
+          schema:
+            nullable: false
+            enum:
+              - LIEFERSCHEIN
+              - MEDIA
+              - DOKUMENT
+              - IMAGE
+              - VIDEO
+              - ANY
+            type: string
+          in: query
+        - name: additionaldata
+          schema:
+            type: object
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+          description: Responds with status of success
+          x-oad-type: response
+      operationId: Transmit a file to api
+      summary: Stores a  file
+      description: This Routes is used to upload files
+    x-oad-type: operation
+  /api/v1/datahub/products/prices/ekugellager:
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EkuPrice'
+          description: Responses with a list of products
+          x-oad-type: response
+      operationId: Receive Product Price List Eku
+      summary: Get all product prices for ekugellager
+      description: This Routes transmit all product prices including all price profiles
+    x-oad-type: operation
+  /api/v1/datahub/products/prices/pdo:
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductPrice'
+          description: Responses with a list of products
+          x-oad-type: response
+      operationId: Receive Product Price Profiles
+      summary: Get all product price profiles
+      description: This Routes transmit all product prices including all price profiles
+    x-oad-type: operation
+  '/api/v1/datahub/products/{productid}/quantity/':
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: productid
+          schema:
+            type: string
+            x-oad-type: parameter
+          in: path
+          required: true
+          x-oad-type: parameter
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductQuantity'
+          description: Responses with a list of products
+          x-oad-type: response
+      operationId: Receive Quantity for ProductId
+      summary: Get a specific Quantity
+      description: This Routes transmit stock quantity
+    x-oad-type: operation
+  /api/v1/datahub/products/categories/:
+    get:
+      tags:
+        - Datahub
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductCategory'
+          description: Responses with a list of product categories
+          x-oad-type: response
+      operationId: Receive Product Category List
+      summary: Get all product categories
+      description: This Routes sends you all products Picard is offering
+    x-oad-type: operation
+  /api/v1/datahub/orders/:
+    summary: PDO Orders to Picard
+    post:
+      requestBody:
+        description: The complete Order Object, See example or Schema
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequest'
+        required: true
+      tags:
+        - Work in Progress
+      responses:
+        '200':
           content:
             application/json:
               schema:
@@ -63,14 +445,658 @@ paths:
                 items:
                   title: ProductData
                   type: object
-                  properties: {}
                   x-oad-type: object
+          description: Responses with an object containing all changes
           x-oad-type: response
+      operationId: Post Orders from PDO Portal
+      summary: Send PDO Orders to Picard
+      description: Transfer Route to transfer orders to Picard
     x-oad-type: operation
+    x-last-modified: 1598348347635
+  /api/v1/datahub/pdo/settings:
+    summary: PDO Settings from Picard
+    get:
+      parameters:
+        - name: offset
+          description: >-
+            The number of items to skip before starting to collect the result
+            set
+          schema:
+            type: integer
+          in: query
+        - name: limit
+          description: The numbers of items to return
+          schema:
+            type: integer
+          in: query
+        - name: datefilter
+          description: "Filters only records with changes after specified date (RFC3339), example: 2020-07-21T17:32:28Z"
+          schema:
+            type: string
+            format: date-time
+          in: query
+      tags:
+        - Work in Progress
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PDOSettings'
+                  
+          description: Responses with an object containing all settings
+          x-oad-type: response
+      operationId: Get PDO Settings from Picard
+      summary: Get PDO Settings from Picard
+      description: Transfer Route to transfer settings from Picard
+    x-oad-type: operation
+    x-last-modified: 1598348347635
 components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        ProductId:
+          format: integer
+          type: number
+        ProductName:
+          type: string
+        ProductName2:
+          type: string
+        CategoryId:
+          format: integer
+          type: number
+        CategoryIdEku:
+          format: integer
+          type: number
+        Ean:
+          type: array
+          items:
+            type: string
+        ManufacturerId:
+          format: integer
+          type: number
+        ExternManufacturerId:
+          format: integer
+          type: number
+        Attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              LocalizationIso:
+                title: Language Code Iso String
+                type: string
+              AttributeKey:
+                type: string
+              AttributeValue:
+                type: string
+        BuildProducts:
+          type: array
+          items:
+            title: Identical related Products
+            type: string
+        RelatedProducts:
+          type: array
+          items:
+            title: Identical related Products
+            type: string
+        SetProducts:
+          type: array
+          items:
+            title: Identical related Products
+            type: string
+        Dimension:
+          type: object
+          properties:
+            Size:
+              type: object
+              properties:
+                InnerDiameter:
+                  type: number
+                OuterDiameter:
+                  type: number
+                Width:
+                  type: number
+            Weight:
+              type: number
+        Images:
+          type: object
+          properties:
+            Ekugellager:
+              type: object
+              properties:
+                FrontImage:
+                  type: string
+                BackImage:
+                  type: string
+                AllroundImage:
+                  type: string
+            Picard:
+              type: object
+              properties:
+                FrontImage:
+                  type: string
+                BackImage:
+                  type: string
+                AllroundImage:
+                  type: string
+                SketchImage:
+                  type: string
+        SearchTags1:
+          type: string
+        SearchTags2:
+          type: string
+        SearchTags3:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    ProductCategory:
+      type: object
+      properties:
+        CategoryId:
+          type: number
+        CategoryParentId:
+          type: number
+        Translations:
+          type: array
+          items:
+            type: object
+            properties:
+              LocalizationIso:
+                type: string
+              CategoryName:
+                type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    ProductQuantity:
+      type: object
+      properties:
+        ProductId:
+          type: number
+        Quantity:
+          type: number
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    ProductManufacturer:
+      type: object
+      properties:
+        ManufacturerId:
+          type: number
+        FullName:
+          type: string
+        ShortName:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    Localization:
+      type: object
+      properties:
+        LocalizationId:
+          type: number
+        LocalizationIso:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    PDOSettings:
+      type: object
+      properties:
+        CustomerId:
+          type: number
+        CustomerName:
+          type: string
+        CustomerKey:
+          type: string
+        PriceProfile:
+          type: number
+        IsSelection:
+          type: boolean
+        IsOccasion:
+          type: boolean
+        Localization:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    ProductPrice:
+      type: object
+      properties:
+        ProductId:
+          title: Zugehörige Produkt Id
+          type: number
+        PriceProfile:
+          title: Zugehöriges Preis Profil
+          type: number
+        Currency:
+          title: Währung ist immer EUR
+          type: string
+        ProductPrice:
+          title: Produkt Preis in Euro
+          type: number
+        ListPrice:
+          title: offizieller Listenpreis
+          type: number
+        FictiveListPrice:
+          title: falls nicht offizieller Listenpreis
+          type: number
+        OccasionPrice:
+          title: Kunden Occasionspreis
+          type: number
+        SelectionPrice:
+          title: Kunden Selektionspreis
+          type: number
+        CreatedAt:
+          title: Date of creation as ISO String
+          type: string
+          format: date-time
+        ModifiedAt:
+          title: Date of modification as ISO String
+          type: string
+          format: date-time
+        DeletedAt:
+          title: Date of delete as ISO String
+          type: string
+          format: date-time
+    PdoSettings:
+      type: object
+      properties:
+        CustomerId:
+          type: number
+        CustomerName:
+          type: string
+        CustomerKey:
+          type: string
+        PriceProfile:
+          type: number
+        IsSelection:
+          type: boolean
+        IsOccasion:
+          type: boolean
+        IsActive:
+          type: boolean
+        Localization:
+          type: array
+          items:
+            title: 'Array with Iso Codes  i.e. de-DE, en-EN'
+            example: 'de-DE'
+            type: string
+        CreatedAt:
+          title: Date of creation as ISO String
+          type: string
+          format: date-time
+        ModifiedAt:
+          title: Date of modification as ISO String
+          type: string
+          format: date-time
+        DeletedAt:
+          title: Date of delete as ISO String
+          type: string
+          format: date-time
+    EkuPrice:
+      type: object
+      properties:
+        ProductId:
+          type: number
+        Range:
+          type: object
+          properties:
+            FromQty:
+              title: Preise von
+              type: number
+            ToQty:
+              title: Preise bis
+              type: number
+            Price:
+              type: string
+        CreatedAt:
+          title: Date of creation as ISO String
+          type: string
+          format: date-time
+        ModifiedAt:
+          title: Date of modification as ISO String
+          type: string
+          format: date-time
+        DeletedAt:
+          title: Date of delete as ISO String
+          type: string
+          format: date-time
+    OrderRequest:
+      type: object
+      properties:
+        CreatedAt:
+          type: string
+          format: date-time
+        OrderId:
+          type: number
+        InvoiceNumber:
+          type: number
+        InvoiceDate:
+          type: string
+          format: date-time
+        DeliveryDate:
+          type: string
+          format: date-time
+        PicardCustomerId:
+          type: number
+        ShopCustomerId:
+          type: number
+        ShopLoginId:
+          type: number
+        ShopLoginEmail:
+          example: 'name@domain'
+          type: string
+        AddressDelivery:
+          type: object
+          properties:
+            Country:
+              example: 'Germany'
+              type: string
+            State:
+              example: 'NRW'
+              type: string
+            City:
+              example: 'Bochum'
+              type: string
+            Postcode:
+              example: '44805'
+              type: string
+            Street:
+              example: 'Dietrich-Benking-Straße 78'
+              type: string
+            Company:
+              example: 'Friedrich PICARD GmbH & Co. KG'
+              type: string
+            Firstname:
+              example: 'Max'
+              type: string
+            Lastname:
+              example: 'Mustermann'
+              type: string
+            Phone:
+              example: '+49 234 53993-130'
+              type: string
+        AddressInvoice:
+          type: object
+          properties:
+            Country:
+              example: 'Germany'
+              type: string
+            State:
+              example: 'NRW'
+              type: string
+            City:
+              example: 'Bochum'
+              type: string
+            Postcode:
+              example: '44805'
+              type: string
+            Street:
+              example: 'Dietrich-Benking-Straße 78'
+              type: string
+            Company:
+              example: 'Friedrich PICARD GmbH & Co. KG'
+              type: string
+            Firstname:
+              example: 'Max'
+              type: string
+            Lastname:
+              example: 'Mustermann'
+              type: string
+            Phone:
+              example: '+49 234 53993-130'
+              type: string
+        Currency:
+          enum:
+            - EUR
+            - USD
+            - GBP
+          type: string
+          minLength: 2
+          maxLength: 3
+        Language:
+          enum:
+            - DE
+            - EN
+          type: string
+          minLength: 2
+          maxLength: 2
+        VatNumber:
+          example: 'DE 286241645'
+          type: string
+        CarrierId:
+          example: 'placeholder'
+          type: string
+        IsPDFDelivered:
+          type: boolean
+        DeliveryNote:
+          example: 'placeholder'
+          type: string
+        IsPaid:
+          type: boolean
+        PaymentMethod:
+          type: string
+        TotalPaid:
+          example: '0.00'
+          type: string
+          pattern: '^[0-9]+(\.[0-9]{1,2})?$'
+        TotalShipping:
+          example: '0.00'
+          type: string
+          pattern: '^[0-9]+(\.[0-9]{1,2})?$'
+        OrderRows:
+          type: array
+          items:
+            type: object
+            properties:
+              ProductId:
+                type: number
+              ProductReference:
+                type: string
+              ProductQuantity:
+                example: 1
+                multipleOf: 1
+                type: number
+              Price:
+                example: '0.00'
+                type: string
+                pattern: '^[0-9]+(\.[0-9]{1,2})?$'
+              ProductSupplierReference:
+                example: 'placeholder'
+                type: string
+              LineReferenceText:
+                example: 'placeholder'
+                type: string
+              LinearLength:
+                example: '0.00'
+                type: string
+                pattern: '^[0-9]+(\.[0-9]{1,2})?$'
+              LinearDistanceFirstBore:
+                example: '0.00'
+                type: string
+                pattern: '^[0-9]+(\.[0-9]{1,2})?$'
+              LinearSymmetrical:
+                type: number
+        ShopId:
+          type: number
+        Reference:
+          example: 'placeholder'
+          type: string
+        Comment:
+          example: 'placeholder'
+          type: string
+        DiscountName:
+          example: 'placeholder'
+          type: string
+        DiscountCode:
+          example: 'placeholder'
+          type: string
+        DiscountValue:
+          example: '0.00'
+          type: string
+          pattern: '^[0-9]+(\.[0-9]{1,2})?$'
+    UploadedFile:
+      type: object
+      properties:
+        Id:
+          type: number
+        UploadedAt:
+          type: string
+        OriginalFilename:
+          type: string
+        EncodingInfo:
+          type: string
+        MimeType:
+          type: string
+        Size:
+          type: string
+        StorageDestination:
+          type: string
+        Filename:
+          type: string
+        Path:
+          type: string
+        Type:
+          title: Entweder LIEFERSCHEIN|MEDIA|DOKUMENT|IMAGE|VIDEO|ANY
+          type: string
+    LineartechProduct:
+      type: object
+      properties:
+        ProductId:
+          type: number
+        Type:
+          type: number
+        Length:
+          type: number
+        MinLengthLeft:
+          type: number
+        MaxLengthLeft:
+          type: number
+        LengthToHole:
+          type: number
+        Height:
+          type: number
+        Width:
+          type: number
+        HoleDiameter:
+          type: number
+        Thread:
+          type: number
+        NumberHoles:
+          type: number
+        Sketch:
+          type: string
+        SchemaFilter:
+          type: string
+        Weight:
+          type: number
+        Details:
+          type: object
+          properties:
+            LengthOriginal:
+              type: number
+            LengthInStock:
+              type: number
+            LengthLeft:
+              type: number
+            LengthRight:
+              type: number
+            CreatedAt:
+              type: string
+              format: date-time
+            ModifiedAt:
+              type: string
+              format: date-time
+            DeletedAt:
+              type: string
+              format: date-time
+        CreatedAt:
+          type: string
+          format: date-time
+        ModifiedAt:
+          type: string
+          format: date-time
+        DeletedAt:
+          type: string
+          format: date-time
+    LineartechProductQuantity:
+      type: object
+      properties:
+        ProductId:
+          type: number
+        Details:
+          type: object
+          properties:
+            LengthOriginal:
+              type: number
+            LengthInStock:
+              type: number
+            LengthLeft:
+              type: number
+            LengthRight:
+              type: number
+            CreatedAt:
+              type: string
+              format: date-time
+            ModifiedAt:
+              type: string
+              format: date-time
+            DeletedAt:
+              type: string
+              format: date-time
   securitySchemes:
     Development:
       type: apiKey
       description: This Api Key is for accessing developer routes
       name: token
       in: header
+  responses: {}
+  parameters: {}
+security:
+  - Development: []
+tags:
+  - name: Datahub
+  - name: Files
+  - name: Work in Progress

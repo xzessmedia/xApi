@@ -11,11 +11,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- Exportiere Datenbank Struktur für datahubapi
-CREATE DATABASE IF NOT EXISTS `datahubapi` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `datahubapi`;
-
 -- Exportiere Struktur von Tabelle datahubapi.requestlog
 CREATE TABLE IF NOT EXISTS `requestlog` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -30,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `requestlog` (
   KEY `AccessedRoute` (`AccessedRoute`),
   KEY `RemoteIP` (`RemoteIP`),
   KEY `User` (`User`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- Daten Export vom Benutzer nicht ausgewählt
 

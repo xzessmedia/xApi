@@ -1,37 +1,51 @@
 {
-    "name": "xApi Lightweight Boilerplate",
-    "publicurl": "api.mydomain.com",
-    "version": "0.44",
+    "name": "Picard Datahub",
+    "version": "0.55",
     "debug": false,
+    "testmode": false,
+    "localtestmode": true,
     "port": 3500,
     "crypt": {
-        "password": "jdskajkajDJHSAKJ432DAKJSKAKAJSDjsd"
+        "password": "Picard1922Picard1922"
     },
+    "auth" : ["http://gravity.picard.de:9011"],
+    "uploads": "../uploads/",
+    "publicurl": "datahub.picard.de",
     "ssl": {
-        "useSSL": false,
-        "SSLKey": "/etc/ssl/crt/YOURSSL.key",
-        "SSLCRT": "/etc/ssl/crt/YOURSSL.crt"
+        "useSSL": true,
+        "key": "/etc/ssl/crt/picard_de.key",
+        "crt": "/etc/ssl/crt/picard_de.crt"
     },
-    "auth" : [],
     "apikeys": [
         {
-            "User": "Developer",
-            "Key": "TESTTOKEN"
+            "User": "Picard",
+            "Key": "Pic@rd1922Pic@rd1922"
+        },
+        {
+            "User": "Rockomedia",
+            "Key": "Qh12dssXXd54lakjhsd373uurUUUFNSWQqsddhcoiyx0"
         }
     ],
     "database": {
-        "mysql": {
+        "mysql_production": {
             "host": "localhost",
             "user": "admin",
-            "password": "33afbOSdjY2e7c60",
-            "database": "xapi",
+            "password": "33afbe7c60",
+            "database": "datahubapi",
 			"connectionLimit": 1000
         },
-        "mysql_test": {
+        "mysql_staging": {
+            "host": "localhost",
+            "user": "admin",
+            "password": "33afbe7c60",
+            "database": "datahubapi_stage",
+			"connectionLimit": 1000
+        },
+        "mysql_localtest": {
             "host": "localhost",
             "user": "root",
-            "password": "123456",
-            "database": "xapi",
+            "password": "gitarre2k",
+            "database": "datahubapi",
 			"connectionLimit": 1000
         }
     }

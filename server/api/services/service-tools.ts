@@ -7,12 +7,19 @@
  * @Last Modified time: 2020-02-13 09:25:38
  */
 
- import CoreData from "../core/database";
- import { Request } from "express";
+import CoreData from "../core/coredata";
+
 
  class ServiceTools {
-    static SQLPagination(req: Request) {
-        return ` LIMIT ${req.query.offset}, ${req.query.limit}`;
+     static GetMutterForProductId(productid: string) {
+         return new Promise(async (resolve, reject) => {
+            try {
+                let q1 = await CoreData.Query(`SELECT muttervarnr FROM products_stock where productid =${productid}`);
+                resolve(q1);
+            } catch (error) {
+                reject(error);
+            }
+         });
      }
 
      static TransformResultSet<T>(values: any[]): T[] {
@@ -26,6 +33,11 @@
      static CreateSQLDateString(date: string) {
          return new Date(date).toISOString().slice(0, 19).replace('T', ' ');
      }
+
+    static DatetoTimestamp(strDate: string){
+        let date = Date.parse(strDate);
+        return date/1000;
+       }
 
      static async asyncForEach(array: Array<any>, callback: any) {
         for (let index = 0; index < array.length; index++) {

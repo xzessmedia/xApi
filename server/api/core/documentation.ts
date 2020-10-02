@@ -11,9 +11,9 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'xApi',
+      title: 'Picard Stock Api',
       version: '1.0.0',
-      description: 'REST Api powered by xApi'
+      description: 'REST Api to access Picard Stock'
     },
   },
   // Path to the API docs
